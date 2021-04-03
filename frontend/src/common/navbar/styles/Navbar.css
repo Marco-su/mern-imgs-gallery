@@ -1,0 +1,12 @@
+#main-navbar .nav-item {
+  margin-right: 1rem;
+}
+
+#main-navbar .nav-item:last-child {
+  margin-right: 0;
+}
+
+#main-navbar button {
+  background: none;
+  border: none;
+}
