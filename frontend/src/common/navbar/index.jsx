@@ -1,7 +1,7 @@
 import "./styles/Navbar.css";
 import { Link } from "react-router-dom";
 
-import NavItems from "./isAuthItems";
+import NavItems from "./NavItems";
 
 const Navbar = () => {
   return (
