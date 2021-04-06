@@ -3,6 +3,7 @@ import { isAdmin } from "../helpers/isAdmin";
 
 import fs from "fs-extra";
 import path from "path";
+import { userImages } from "../helpers/userImages";
 
 //--Get images
 export const getImages = async (req, res) => {
@@ -36,9 +37,16 @@ export const createNewImage = async (req, res) => {
     storage_name,
   });
 
-  await newImage.save();
+  const savedImage = await newImage.save();
 
-  return res.json({ message: "Image uploaded", success: true });
+  const images = await userImages(req.userId);
+
+  return res.json({
+    message: "Image uploaded",
+    success: true,
+    images,
+    newImageId: savedImage._id,
+  });
 };
 
 //--Update image
@@ -53,7 +61,10 @@ export const updateImage = async (req, res) => {
 
   await Image.findByIdAndUpdate(req.params.id, req.body);
 
-  return res.json({ message: "Image updated", success: true });
+  return res.json({
+    message: "Image updated",
+    success: true,
+  });
 };
 
 //--Delete image
@@ -65,7 +76,6 @@ export const deleteImage = async (req, res) => {
 
   if (image.userId !== req.userId) {
     const admin = await isAdmin(req.userId);
-
     if (!admin) return res.json({ message: "Not authorized to delete it" });
   }
 
@@ -75,5 +85,7 @@ export const deleteImage = async (req, res) => {
     path.join(__dirname, `../public/uploads/${deletedImage.storage_name}`)
   );
 
-  return res.json({ message: "Image deleted", success: true });
+  const images = await userImages(req.userId);
+
+  return res.json({ message: "Image deleted", success: true, images });
 };

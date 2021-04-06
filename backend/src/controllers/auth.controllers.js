@@ -1,5 +1,7 @@
 import User from "../models/User";
 import Role from "../models/Role";
+import { isAdmin } from "../helpers/isAdmin";
+import { userImages } from "../helpers/userImages";
 
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -10,6 +12,7 @@ const secret = process.env.SECRET_WORD || "secret";
 
 //--Login
 export const login = async (req, res) => {
+  //...Validating user
   const userFound = await User.findOne({ email: req.body.email }).populate(
     "roles"
   );
@@ -24,15 +27,25 @@ export const login = async (req, res) => {
     req.body.password,
     userFound.password
   );
-
   if (!matchPassword)
     return res.json({ message: "Invalid password", success: false });
 
+  //...Establishing response data
+  const images = await userImages(userFound._id);
+  const admin = await isAdmin(userFound._id);
+  const username = userFound.username;
   const token = jwt.sign({ userId: userFound._id }, secret, {
     expiresIn: 86400,
   });
 
-  return res.json({ token, success: true });
+  //...Sending success response
+  return res.json({
+    token,
+    username,
+    isAdmin: admin,
+    images,
+    success: true,
+  });
 };
 
 //--Register
@@ -61,7 +74,7 @@ export const register = async (req, res) => {
     newUser.roles = [role._id];
   }
 
-  const savedUser = await newUser.save();
+  await newUser.save();
 
   return res.json({ message: "User created", success: true });
 };

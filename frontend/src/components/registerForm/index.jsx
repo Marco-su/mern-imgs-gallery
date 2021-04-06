@@ -45,18 +45,21 @@ const RegisterForm = () => {
           type="text"
           placeholder="Username"
           onChange={(e) => setUsername(e.target.value)}
+          required
         />
         <input
           className="form-control mb-2"
           type="email"
           placeholder="email"
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <input
           className="form-control mb-2"
           type="password"
           placeholder="password"
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
         <button className="btn btn-success">SignUp</button>
 

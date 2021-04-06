@@ -1,9 +1,9 @@
 //--Imports
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, withRouter } from "react-router-dom";
 import { getSingleImage, updateImage } from "../../services/imagesCrud";
 
-const ImageUpdate = () => {
+const ImageUpdate = ({ history }) => {
   //...States
   const { id } = useParams();
   const [image, setImage] = useState(null);
@@ -30,7 +30,9 @@ const ImageUpdate = () => {
     e.preventDefault();
 
     updateImage(title, description, id)
-      .then((res) => console.log(res))
+      .then((res) => {
+        if (res.data.success) history.push(`/images/${id}`);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -69,4 +71,4 @@ const ImageUpdate = () => {
 };
 
 //---Export
-export default ImageUpdate;
+export default withRouter(ImageUpdate);

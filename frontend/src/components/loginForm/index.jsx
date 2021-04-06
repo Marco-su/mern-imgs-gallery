@@ -1,14 +1,16 @@
 //--Imports
-import { useState } from "react";
-import { Redirect } from "react-router-dom";
+import { useState, useContext } from "react";
+import { withRouter } from "react-router-dom";
 import { login } from "../../services/auth";
+import context from "../../services/context";
 
-const LoginForm = () => {
+const LoginForm = ({ history }) => {
   //...States
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState(null);
-  const [successLogin, setSuccessLogin] = useState(false);
+
+  const { setIsLogged } = useContext(context);
 
   //...Signin function
   const handleSubmit = (e) => {
@@ -19,8 +21,18 @@ const LoginForm = () => {
     login(data)
       .then((res) => {
         if (res.data.success) {
+          const user = {
+            isAdmin: res.data.isAdmin,
+            username: res.data.username,
+            images: res.data.images,
+          };
+
           window.localStorage.setItem("auth", res.data.token);
-          setSuccessLogin(true);
+          window.localStorage.setItem("user", JSON.stringify(user));
+
+          setIsLogged(true);
+
+          history.push("/");
         } else {
           setMessage(res.data.message);
         }
@@ -43,6 +55,7 @@ const LoginForm = () => {
           type="email"
           placeholder="email"
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
         <input
@@ -50,15 +63,14 @@ const LoginForm = () => {
           type="password"
           placeholder="password"
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
 
         <button className="btn btn-success">SignIn</button>
       </form>
-
-      {successLogin ? <Redirect to="/" /> : null}
     </div>
   );
 };
 
 //--Export
-export default LoginForm;
+export default withRouter(LoginForm);

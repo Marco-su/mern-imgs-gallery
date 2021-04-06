@@ -1,9 +1,25 @@
+//--Imports
 import "./styles/Navbar.css";
 import { Link } from "react-router-dom";
+import { useContext, useEffect } from "react";
 
 import NavItems from "./NavItems";
+import context from "../../services/context";
 
 const Navbar = () => {
+  //...States
+  const { setIsLogged } = useContext(context);
+
+  //...Is autheticated function to start or restart application
+  useEffect(() => {
+    const abortController = new AbortController();
+
+    if (window.localStorage.getItem("auth")) setIsLogged(true);
+
+    return abortController.abort();
+  }, [setIsLogged]);
+
+  //...Render
   return (
     <nav
       id="main-navbar"
@@ -36,4 +52,5 @@ const Navbar = () => {
   );
 };
 
+//--Export
 export default Navbar;

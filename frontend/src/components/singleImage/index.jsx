@@ -1,7 +1,8 @@
 //--Imports
 import { useEffect, useState } from "react";
-import { useParams, withRouter } from "react-router-dom";
-import { getSingleImage, deleteImage } from "../../services/imagesCrud";
+import { useParams } from "react-router-dom";
+import { getSingleImage } from "../../services/imagesCrud";
+import Buttons from "./Buttons";
 
 const SingleImage = ({ history }) => {
   //...States
@@ -19,16 +20,6 @@ const SingleImage = ({ history }) => {
     return () => abortController.abort();
   }, [id]);
 
-  //...Delete image
-  const deleteThisImage = () => {
-    //---Debo verificar token aquí
-    //---Debo redireccionar luego de eliminar o mostrar mensaje
-
-    deleteImage(id)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  };
-
   //...Render
   return (
     <div className="container my-3">
@@ -41,19 +32,10 @@ const SingleImage = ({ history }) => {
         <figcaption>{image.description}</figcaption>
       </figure>
 
-      <button className="btn btn-danger me-2" onClick={deleteThisImage}>
-        Delete
-      </button>
-
-      <button
-        className="btn btn-primary"
-        onClick={() => history.push(`/update/${id}`)}
-      >
-        Edit
-      </button>
+      <Buttons />
     </div>
   );
 };
 
 //--Export
-export default withRouter(SingleImage);
+export default SingleImage;

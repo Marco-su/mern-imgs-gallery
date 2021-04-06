@@ -1,9 +1,11 @@
 //--Imports
 import { useState } from "react";
+import { withRouter } from "react-router-dom";
+
 import { showPreview } from "../../services/showPreview";
 import { createImage } from "../../services/imagesCrud";
 
-const ImageUploader = () => {
+const ImageUploader = ({ history }) => {
   //...States
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -25,10 +27,18 @@ const ImageUploader = () => {
 
     if (!invalidImage) {
       //---Debo agregar validacion del token aqui
-      //---Debo configurar el backend para que me mande el id del a imagen para redireccionar al usuario
 
       createImage(title, description, image)
-        .then((res) => console.log(res))
+        .then((res) => {
+          if (res.data.success) {
+            const user = JSON.parse(window.localStorage.getItem("user"));
+
+            user.images = res.data.images;
+            window.localStorage.setItem("user", JSON.stringify(user));
+
+            history.push(`/image/${res.data.newImageId}`);
+          }
+        })
         .catch((err) => console.log(err));
     }
   };
@@ -42,6 +52,7 @@ const ImageUploader = () => {
           type="file"
           onChange={showImagePreview}
           accept="image/*"
+          required
         />
 
         <input
@@ -49,6 +60,7 @@ const ImageUploader = () => {
           type="text"
           placeholder="Title"
           onChange={(e) => setTitle(e.target.value)}
+          required
         />
 
         <textarea
@@ -56,6 +68,7 @@ const ImageUploader = () => {
           rows="2"
           placeholder="Description"
           onChange={(e) => setDescription(e.target.value)}
+          required
         ></textarea>
 
         {invalidImage ? (
@@ -71,4 +84,4 @@ const ImageUploader = () => {
 };
 
 //--Export
-export default ImageUploader;
+export default withRouter(ImageUploader);
