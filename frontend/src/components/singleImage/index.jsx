@@ -1,4 +1,5 @@
 //--Imports
+import "./styles/SingleImage.css";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getSingleImage } from "../../services/imagesCrud";
@@ -22,17 +23,22 @@ const SingleImage = ({ history }) => {
 
   //...Render
   return (
-    <div className="container my-3">
-      <h3>{image.title}</h3>
-      <figure>
-        <img
-          src={image._id ? `http://localhost:4000/${image.storage_name}` : ""}
-          alt={image.title ? image.title : ""}
-        />
-        <figcaption>{image.description}</figcaption>
-      </figure>
-
-      <Buttons />
+    <div id="single-image" className="card">
+      <div className="card-header bg-dark">
+        <h3 className="text-white">{image.title}</h3>
+      </div>
+      <div className="card-body">
+        <figure>
+          <img
+            src={image._id ? `http://localhost:4000/${image.storage_name}` : ""}
+            alt={image.title ? image.title : ""}
+          />
+          <figcaption className="text-secondary">
+            {image.description}
+          </figcaption>
+        </figure>
+        <Buttons />
+      </div>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 //--Imports
+import "./styles/ImagesList.css";
 import { useState, useEffect } from "react";
 import { getImages } from "../../services/imagesCrud";
 import Image from "./Image";
@@ -20,7 +21,7 @@ const ImagesList = () => {
 
   //...Render
   return (
-    <div id="image-list" className="container">
+    <div id="images-list" className="container">
       {images.map((image) => (
         <Image
           key={image._id}
