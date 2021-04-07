@@ -2,6 +2,7 @@
 import "./styles/Navbar.css";
 import { Link } from "react-router-dom";
 import { useContext, useEffect } from "react";
+import Cookies from "js-cookie";
 
 import NavItems from "./NavItems";
 import context from "../../services/context";
@@ -14,7 +15,7 @@ const Navbar = () => {
   useEffect(() => {
     const abortController = new AbortController();
 
-    if (window.localStorage.getItem("auth")) setIsLogged(true);
+    if (Cookies.get("authConfirm")) setIsLogged(true);
 
     return abortController.abort();
   }, [setIsLogged]);

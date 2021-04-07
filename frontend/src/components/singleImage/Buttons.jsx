@@ -32,7 +32,7 @@ const Buttons = ({ history }) => {
       ? (user = JSON.parse(window.localStorage.getItem("user")))
       : (user = null);
 
-    if (user && (user.images.includes(id) || user.isAdmin)) {
+    if (user && user.images.includes(id)) {
       setIsOwner(true);
     }
 

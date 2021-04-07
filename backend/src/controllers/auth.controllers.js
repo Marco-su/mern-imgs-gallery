@@ -35,14 +35,25 @@ export const login = async (req, res) => {
   const admin = await isAdmin(userFound._id);
   const username = userFound.username;
   const token = jwt.sign({ userId: userFound._id }, secret, {
-    expiresIn: 86400,
+    expiresIn: 24 * 3600,
   });
 
   //...Sending success response
-  return res.json({
-    token,
+  const cookieOptions = {
+    signed: true,
+    httpOnly: true,
+    maxAge: 24 * 3600000,
+  };
+
+  res.cookie("isAdmin", admin, cookieOptions);
+  res.cookie("auth", token, cookieOptions);
+  res.cookie("authConfirm", token, {
+    signed: true,
+    maxAge: 24 * 3600000,
+  });
+
+  res.json({
     username,
-    isAdmin: admin,
     images,
     success: true,
   });

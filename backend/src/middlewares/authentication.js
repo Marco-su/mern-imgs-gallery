@@ -1,15 +1,15 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User";
-import dotenv from "dotenv";
 
 const secret = process.env.SECRET_WORD || "secret";
 
 export const isAuth = async (req, res, next) => {
   try {
-    const token = req.headers["x-access-token"];
+    const token = req.signedCookies.auth;
+    const verifyToken = req.signedCookies.authConfirm;
 
-    if (!token)
-      return res.json({ message: "Is not authenticated", success: false });
+    if (!verifyToken || token !== verifyToken)
+      res.json({ message: "No valid user found", success: false });
 
     const decoded = jwt.verify(token, secret);
     req.userId = decoded.userId;
@@ -24,6 +24,7 @@ export const isAuth = async (req, res, next) => {
 
     next();
   } catch (error) {
+    console.log(error.message);
     res.json({ message: "Invalid token", success: false });
   }
 };

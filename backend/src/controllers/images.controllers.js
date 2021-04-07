@@ -8,17 +8,14 @@ import { userImages } from "../helpers/userImages";
 //--Get images
 export const getImages = async (req, res) => {
   const images = await Image.find().sort({ createdAt: -1 }).limit(20);
-
   return res.json(images);
 };
 
 //--Get single image
 export const getSingleImage = async (req, res) => {
   const image = await Image.findById(req.params.id);
-
   if (!image)
     return res.json({ message: "The image does not exist", success: false });
-
   return res.json(image);
 };
 

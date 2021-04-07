@@ -31,7 +31,7 @@ const ImageUpdate = ({ history }) => {
 
     updateImage(title, description, id)
       .then((res) => {
-        if (res.data.success) history.push(`/images/${id}`);
+        if (res.data.success) history.push(`/image/${id}`);
       })
       .catch((err) => console.log(err));
   };

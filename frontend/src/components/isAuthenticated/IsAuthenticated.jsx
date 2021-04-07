@@ -1,7 +1,8 @@
 import { Redirect } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export const IsAuthenticated = ({ Component }) => {
-  if (window.localStorage.getItem("auth")) {
+  if (Cookies.get("authConfirm")) {
     return <Component />;
   }
 
@@ -9,7 +10,7 @@ export const IsAuthenticated = ({ Component }) => {
 };
 
 export const IsNotAutheticated = ({ Component }) => {
-  if (!window.localStorage.getItem("auth")) {
+  if (!Cookies.get("authConfirm")) {
     return <Component />;
   }
 

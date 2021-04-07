@@ -1,5 +1,7 @@
 import { useContext } from "react";
 import { withRouter } from "react-router-dom";
+import Cookies from "js-cookie";
+
 import context from "../../services/context";
 import Item from "./Item";
 
@@ -8,8 +10,9 @@ const NavItems = ({ history }) => {
 
   //...Logout function
   const logout = () => {
-    localStorage.removeItem("auth");
     localStorage.removeItem("user");
+    Cookies.remove("authConfirm");
+
     history.push("/");
     setIsLogged(false);
   };

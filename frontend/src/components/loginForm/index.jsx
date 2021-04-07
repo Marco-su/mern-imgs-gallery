@@ -22,12 +22,10 @@ const LoginForm = ({ history }) => {
       .then((res) => {
         if (res.data.success) {
           const user = {
-            isAdmin: res.data.isAdmin,
             username: res.data.username,
             images: res.data.images,
           };
 
-          window.localStorage.setItem("auth", res.data.token);
           window.localStorage.setItem("user", JSON.stringify(user));
 
           setIsLogged(true);
